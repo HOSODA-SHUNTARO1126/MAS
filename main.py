@@ -91,14 +91,16 @@ class MyAgent(mesa.Agent):
         pass
     def social_influence(self):
         pass
-    def provisional_judgment(self):
-        pass
+    def provisional_judge(self):
+        provisional_judgment = (self.deliberative_judge() * 0.5) + (self.reflexive_judge() * 0.5)
+
+        return provisional_judgment
     def finalize_judgment(self):
         pass
 
     def step(self):
-        print(f"理性的判断：{self.deliberative_judge()}")
-        print(f"反射的判断：{self.reflexive_judge()}")
+        print(f"暫定判断：{self.provisional_judge()}")
+
 
 
 class MyModel(mesa.Model):
