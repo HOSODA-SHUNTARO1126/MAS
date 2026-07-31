@@ -12,7 +12,7 @@ class RationalParams:
     philosophical_ability: float            # 哲学的能力
     metacognitive_ability: float            # メタ認知能力
     engineering_knowledge: float            # 工学知識
-    ethical_knowledge: float                # 経済学知識
+    ethical_knowledge: float                # 倫理学知識
     legal_knowledge: float                  # 法学知識
     insurance_knowledge: float              # 保険知識
 
@@ -196,8 +196,57 @@ class MyAgent(mesa.Agent):
             returns:
                 deliberative_judgment(float): 熟考的な責任判断。０～１で、０が自動運転システムには責任がなく、１が完全に自動運転システムの責任。
         """
-        deliberative_judgment = self.rational_params.engineering_knowledge * self.model.weights.engineering_knowledge_weight
-        deliberative_judgment /= self.model.weights.engineering_knowledge_weight
+        """
+        # エージェントの能力・知識
+        philosophical_ability: float            # 哲学的能力
+        metacognitive_ability: float            # メタ認知能力
+        engineering_knowledge: float            # 工学知識
+        ethical_knowledge: float                # 倫理学知識
+        legal_knowledge: float                  # 法学知識
+        insurance_knowledge: float              # 保険知識
+
+        # エージェントの倫理的価値観
+        normative_ethical_orientation: float    # 規範倫理志向性
+        moral_orientation: float                # 道徳的志向性
+
+        # 事故状況に対する評価
+        accident_foreseeability: float          # 事故の想定可能性
+        accident_avoidability: float            # 事故の回避可能性
+        duty_deviation: float                   # 義務の逸脱性
+
+        # ドライバーとシステムの状態・認知限界
+        driver_perception_scope: float          # ドライバーの認識範囲
+        system_perception_scope: float          # システムの認識範囲
+        driver_health_condition: float          # ドライバーの健康状態
+
+        # 外部環境
+        road_conditions: float                  # 道路状況
+        weather: float                          # 天候
+        road_accident_frequency: float          # 道路の事故頻度
+        """
+
+        params = self.rational_params
+        weights = self.model.weights
+
+        deliberative_judgment = (
+            (params.philosophical_ability * weights.philosophical_ability_weight)
+            + (params.metacognitive_ability * weights.metacognitive_ability_weight)
+            + (params.engineering_knowledge * weights.engineering_knowledge_weight)
+            + (params.ethical_knowledge * weights.ethical_knowledge_weight)
+            + (params.legal_knowledge * weights.legal_knowledge_weight)
+            + (params.insurance_knowledge * weights.insurance_knowledge_weight)
+            + (params.normative_ethical_orientation * weights.normative_ethical_orientation_weight)
+            + (params.moral_orientation * weights.moral_orientation_weight)
+            + (params.accident_foreseeability * weights.accident_foreseeability_weight)
+            + (params.accident_avoidability * weights.accident_avoidability_weight)
+            + (params.duty_deviation * weights.duty_deviation_weight)
+            + (params.driver_perception_scope * weights.driver_perception_scope_weight)
+            + (params.system_perception_scope * weights.system_perception_scope_weight)
+            + (params.driver_health_condition * weights.driver_health_condition_weight)
+            + (params.road_conditions * weights.road_conditions_weight)
+            + (params.weather * weights.weather_weight)
+            + (params.road_accident_frequency * weights.road_accident_frequency_weight)
+        )
 
         return deliberative_judgment
 
@@ -207,8 +256,44 @@ class MyAgent(mesa.Agent):
             returns:
                 reflexive_judgment(float): 反射的な責任判断。０～１で、０が自動運転システムには責任がなく、１が完全に自動運転システムの責任。
         """
-        reflexive_judgment = self.intuitive_params.car_speed * self.model.weights.car_speed_weight
-        reflexive_judgment /= self.model.weights.car_speed_weight
+        """
+        # 状況コンテキスト
+        car_speed: float                    # 車の速度
+        # 個人の背景・属性
+        car_affinity: float                 # 自動車愛好度
+        tech_affinity: float                # 技術親和性
+        driving_exp: float                  # 運転経験
+        av_driving_exp: float               # 自動運転車の運転経験
+        self_age: float                     # 自分の年齢
+        # 過去の経験
+        accident_exp_perpetrator: bool      # 事故経験（加害）
+        accident_exp_victim: bool           # 事故経験（被害）
+        violation_exp: bool                 # 違法行為の経験
+        # 共感・価値観バイアス
+        driver_age: float                   # ドライバーの年齢
+        driver_similarity: float            # ドライバーとの類似性
+        victim_similarity: float            # 被害者との類似性
+        social_value_orientation: float     # 社会的価値観志向性
+        """
+
+        params = self.intuitive_params
+        weights = self.model.weights
+
+        reflexive_judgment = (
+            (params.car_speed * weights.car_speed_weight)
+            + (params.car_affinity * weights.car_affinity_weight)
+            + (params.tech_affinity * weights.tech_affinity_weight)
+            + (params.driving_exp * weights.driving_exp_weight)
+            + (params.av_driving_exp * weights.av_driving_exp_weight)
+            + (params.self_age * weights.self_age_weight)
+            + (params.accident_exp_perpetrator * weights.accident_exp_perpetrator_weight)
+            + (params.accident_exp_victim * weights.accident_exp_victim_weight)
+            + (params.violation_exp * weights.violation_exp_weight)
+            + (params.driver_age * weights.driver_age_weight)
+            + (params.driver_similarity * weights.driver_similarity_weight)
+            + (params.victim_similarity * weights.victim_similarity_weight)
+            + (params.social_value_orientation * weights.social_value_orientation_weight)
+        )
 
         return reflexive_judgment
 
@@ -235,7 +320,7 @@ class MyAgent(mesa.Agent):
         """
             最終判断
             returns:
-                finalaize_judgment(float): 最終的な責任判断。０～１で、０が自動運転システムには責任がなく、１が完全に自動運転システムの責任。
+                finalize_judgment(float): 最終的な責任判断。０～１で、０が自動運転システムには責任がなく、１が完全に自動運転システムの責任。
         """
         finalize_judgment = self.provisional_judge()
         return finalize_judgment
@@ -269,6 +354,9 @@ class MyModel(mesa.Model):
                 "最終判断": "finalize_judgment"
             }
         )
+
+        # 初期状態の記録
+        self.datacollector.collect(self)
 
     def step(self):
         self.agents.shuffle_do("step")
@@ -309,6 +397,7 @@ def main():
         victim_similarity_weight = 1.0/13,
         social_value_orientation_weight = 1.0/13
     )
+
     model = MyModel(n_agents=5, weights = weights)
     for i in range(3):
         model.step()
