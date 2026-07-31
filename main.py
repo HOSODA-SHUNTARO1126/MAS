@@ -41,23 +41,22 @@ class RationalParams:
     @classmethod
     def random_params(cls, rng):
         return cls(
-            philosophical_ability=rng.random()
-            metacognitive_ability=rng.random()
-            engineering_knowledge=rng.random()
-            ethical_knowledge=rng.random()
-            legal_knowledge=rng.random()
-            insurance_knowledge=rng.random()
-            normative_ethical_orientation=rng.random()
-            moral_orientation=rng.random()
-            accident_foreseeability=rng.random()
-            accident_avoidability=rng.random()
-            duty_deviation=rng.random()
-            driver_perception_scope=rng.random()
-            system_perception_scope=rng.random()
-            driver_health_condition=rng.random()
-            driver_health_condition=rng.random()
-            road_conditions=rng.random()
-            weather=rng.random()
+            philosophical_ability=rng.random(),
+            metacognitive_ability=rng.random(),
+            engineering_knowledge=rng.random(),
+            ethical_knowledge=rng.random(),
+            legal_knowledge=rng.random(),
+            insurance_knowledge=rng.random(),
+            normative_ethical_orientation=rng.random(),
+            moral_orientation=rng.random(),
+            accident_foreseeability=rng.random(),
+            accident_avoidability=rng.random(),
+            duty_deviation=rng.random(),
+            driver_perception_scope=rng.random(),
+            system_perception_scope=rng.random(),
+            driver_health_condition=rng.random(),
+            road_conditions=rng.random(),
+            weather=rng.random(),
             road_accident_frequency=rng.random()
         )
 
@@ -89,18 +88,18 @@ class IntuitiveParams:
     @classmethod
     def random_params(cls, rng):
         return cls(
-            car_speed=rng.random()
-            car_affinity=rng.random()
-            tech_affinity=rng.random()
-            driving_exp=rng.random()
-            av_driving_exp=rng.random()
-            self_age=rng.random()
-            accident_exp_perpetrator=rng.choice([True, False])
-            accident_exp_victim=rng.choice([True, False])
-            violation_exp=rng.choice([True, False])
-            driver_age=rng.random()
-            driver_similarity=rng.random()
-            victim_similarity=rng.random()
+            car_speed=rng.random(),
+            car_affinity=rng.random(),
+            tech_affinity=rng.random(),
+            driving_exp=rng.random(),
+            av_driving_exp=rng.random(),
+            self_age=rng.random(),
+            accident_exp_perpetrator=rng.choice([True, False]),
+            accident_exp_victim=rng.choice([True, False]),
+            violation_exp=rng.choice([True, False]),
+            driver_age=rng.random(),
+            driver_similarity=rng.random(),
+            victim_similarity=rng.random(),
             social_value_orientation=rng.random()
         )
 
@@ -123,7 +122,6 @@ class ParamsWeights:
     duty_deviation_weight: float
     driver_perception_scope_weight: float
     system_perception_scope_weight: float
-    driver_health_condition_weight: float
     driver_health_condition_weight: float
     road_conditions_weight: float
     weather_weight: float
@@ -148,8 +146,27 @@ class ParamsWeights:
         """
             重みの合計が１になっているかをチェックする
         """
-        rational_params_total = self.engineering_knowledge_weight
-        intuitive_params_total = self.car_speed_weight
+        rational_fields = [
+            "philosophical_ability_weight", "metacognitive_ability_weight",
+            "engineering_knowledge_weight", "ethical_knowledge_weight",
+            "legal_knowledge_weight", "insurance_knowledge_weight",
+            "normative_ethical_orientation_weight", "moral_orientation_weight",
+            "accident_foreseeability_weight", "accident_avoidability_weight",
+            "duty_deviation_weight", "driver_perception_scope_weight",
+            "system_perception_scope_weight", "driver_health_condition_weight",
+            "road_conditions_weight", "weather_weight", "road_accident_frequency_weight"
+        ]
+
+        intuitive_fields = [
+            "car_speed_weight", "car_affinity_weight", "tech_affinity_weight",
+            "driving_exp_weight", "av_driving_exp_weight", "self_age_weight",
+            "accident_exp_perpetrator_weight", "accident_exp_victim_weight",
+            "violation_exp_weight", "driver_age_weight", "driver_similarity_weight",
+            "victim_similarity_weight", "social_value_orientation_weight"
+        ]
+
+        rational_params_total = sum(getattr(self, f) for f in rational_fields)
+        intuitive_params_total = sum(getattr(self, f) for f in intuitive_fields)
 
         if round(rational_params_total, 5) != 1.0:
             raise ValueError(f"理性的パラメータの重みの合計が 1.0 ではありません。現在: {rational_params_total})")
@@ -260,37 +277,37 @@ class MyModel(mesa.Model):
 def main():
     weights = ParamsWeights(
         # 理性的パラメータの重み
-        philosophical_ability_weight = 1.0,
-        metacognitive_ability_weight = 1.0,
-        engineering_knowledge_weight = 1.0,
-        ethical_knowledge_weight = 1.0,
-        legal_knowledge_weight = 1.0,
-        insurance_knowledge_weight = 1.0,
-        normative_ethical_orientation_weight = 1.0,
-        moral_orientation_weight = 1.0,
-        accident_foreseeability_weight = 1.0,
-        accident_avoidability_weight = 1.0,
-        duty_deviation_weight = 1.0,
-        driver_perception_scope_weight = 1.0,
-        system_perception_scope_weight = 1.0,
-        driver_health_condition_weight = 1.0,
-        road_conditions_weight = 1.0,
-        weather_weight = 1.0,
-        road_accident_frequency_weight = 1.0,
+        philosophical_ability_weight = 1.0/17,
+        metacognitive_ability_weight = 1.0/17,
+        engineering_knowledge_weight = 1.0/17,
+        ethical_knowledge_weight = 1.0/17,
+        legal_knowledge_weight = 1.0/17,
+        insurance_knowledge_weight = 1.0/17,
+        normative_ethical_orientation_weight = 1.0/17,
+        moral_orientation_weight = 1.0/17,
+        accident_foreseeability_weight = 1.0/17,
+        accident_avoidability_weight = 1.0/17,
+        duty_deviation_weight = 1.0/17,
+        driver_perception_scope_weight = 1.0/17,
+        system_perception_scope_weight = 1.0/17,
+        driver_health_condition_weight = 1.0/17,
+        road_conditions_weight = 1.0/17,
+        weather_weight = 1.0/17,
+        road_accident_frequency_weight = 1.0/17,
         # 反射的パラメータの重み
-        car_speed_weight = 1.0,
-        car_affinity_weight = 1.0,
-        tech_affinity_weight = 1.0,
-        driving_exp_weight = 1.0,
-        av_driving_exp_weight = 1.0,
-        self_age_weight = 1.0,
-        accident_exp_perpetrator_weight = 1.0,
-        accident_exp_victim_weight = 1.0,
-        violation_exp_weight = 1.0,
-        driver_age_weight = 1.0,
-        driver_similarity_weight = 1.0,
-        victim_similarity_weight = 1.0,
-        social_value_orientation_weight = 1.0
+        car_speed_weight = 1.0/13,
+        car_affinity_weight = 1.0/13,
+        tech_affinity_weight = 1.0/13,
+        driving_exp_weight = 1.0/13,
+        av_driving_exp_weight = 1.0/13,
+        self_age_weight = 1.0/13,
+        accident_exp_perpetrator_weight = 1.0/13,
+        accident_exp_victim_weight = 1.0/13,
+        violation_exp_weight = 1.0/13,
+        driver_age_weight = 1.0/13,
+        driver_similarity_weight = 1.0/13,
+        victim_similarity_weight = 1.0/13,
+        social_value_orientation_weight = 1.0/13
     )
     model = MyModel(n_agents=5, weights = weights)
     for i in range(3):
