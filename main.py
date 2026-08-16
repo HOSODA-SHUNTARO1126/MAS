@@ -1,6 +1,9 @@
 import mesa
 from dataclasses import dataclass
+import matplotlib.pyplot as plt
+import japanize_matplotlib
 import pandas as pd
+import seaborn as sns
 
 # データクラス
 @dataclass
@@ -398,7 +401,7 @@ def main():
         social_value_orientation_weight = 1.0/13
     )
 
-    model = MyModel(n_agents=5, weights = weights)
+    model = MyModel(n_agents=1000000, weights = weights)
     for i in range(3):
         model.step()
 
@@ -406,6 +409,24 @@ def main():
     print("\n=== 収集された全エージェントのデータ ===")
     print(agent_data)
 
+    # 可視化
+    plt.figure(figsize=(8, 5))
+    sns.histplot(
+        data=agent_data,
+        x="最終判断",
+        binwidth=0.05,
+        stat="count",
+        kde=True,
+        element="bars",
+        color="skyblue"
+    )
+
+    plt.title("最終判断分布")
+    plt.xlabel("最終判断")
+    plt.ylabel("エージェント数")
+    plt.grid(True, axis="y", linestyle="--", alpha=0.5)
+
+    plt.show()
 
 if __name__ == "__main__":
     main()
